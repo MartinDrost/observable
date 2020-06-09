@@ -1,6 +1,6 @@
 {
   "name": "@martindrost/observable",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Out of the box clean observable class.",
   "main": "distribution/index.js",
   "scripts": {

@@ -42,6 +42,8 @@ export class Observable<Type = any> {
    */
   remove(observer: Observer): void {
     const index = this.observers.indexOf(observer);
-    this.observers.splice(index, 1);
+    if (index !== -1) {
+      this.observers.splice(index, 1);
+    }
   }
 }
