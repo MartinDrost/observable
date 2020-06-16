@@ -1,12 +1,12 @@
 {
   "name": "@martindrost/observable",
-  "version": "1.0.2",
+  "version": "1.0.7",
   "description": "Out of the box clean observable class.",
   "main": "distribution/index.js",
   "scripts": {
     "prepublishOnly": "npm run build",
     "test": "npm run build",
-    "build": "rimraf distribution  && tsc"
+    "build": "rimraf distribution && tsc -d && tsc --removeComments"
   },
   "repository": {
     "type": "git",

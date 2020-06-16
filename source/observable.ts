@@ -1,6 +1,9 @@
 import { Observer } from "./observer";
 
+const observable_closed_msg = "The observable has been closed";
+
 export class Observable<Type = any> {
+  public isClosed: Boolean = false;
   private observers: Observer[] = [];
 
   /**
@@ -8,6 +11,10 @@ export class Observable<Type = any> {
    * @param value
    */
   next(value: Type) {
+    if (this.isClosed) {
+      throw new Error(observable_closed_msg);
+    }
+
     for (const observer of this.observers) {
       observer.callback(value);
     }
@@ -18,6 +25,10 @@ export class Observable<Type = any> {
    * @param callback
    */
   subscribe(callback: (value: Type) => void): Observer<Type> {
+    if (this.isClosed) {
+      throw new Error(observable_closed_msg);
+    }
+
     const observer = new Observer(this, callback);
     this.observers.push(observer);
 
@@ -25,9 +36,13 @@ export class Observable<Type = any> {
   }
 
   /**
-   * Await a single new value as a promise
+   * Returns the next new value as a promise response
    */
-  await(): Promise<Type> {
+  promise(): Promise<Type> {
+    if (this.isClosed) {
+      throw new Error(observable_closed_msg);
+    }
+
     return new Promise<Type>((resolve) => {
       const observer = this.subscribe((value) => {
         this.remove(observer);
@@ -45,5 +60,14 @@ export class Observable<Type = any> {
     if (index !== -1) {
       this.observers.splice(index, 1);
     }
+  }
+
+  /**
+   * Closes the observable for any future calls
+   * @param observer
+   */
+  close(): void {
+    this.isClosed = true;
+    this.observers = [];
   }
 }
